@@ -47,15 +47,42 @@ class Line:
         canvas.create_line(self.__p1.x, self.__p1.y, self.__p2.x, self.__p2.y, fill=fill_color, width=2)
         canvas.pack()
 
+class Cell:
+    def __init__(self, x1, y1, x2, y2, window=None, left=True, right=True, top=True, bottom=True):
+        self.has_left_wall = left
+        self.has_right_wall = right
+        self.has_top_wall = top
+        self.has_bottom_wall = bottom
+        self.__x1 = x1  #left point
+        self.__y1 = y1  #top point
+        self.__x2 = x2  #right point
+        self.__y2 = y2  #bottom point
+        self.__win = window
+    
+    def draw(self):
+        color = "black"
+
+        if self.has_left_wall:
+            self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x1, self.__y2)), color)
+        
+        if self.has_right_wall:
+            self.__win.draw_line(Line(Point(self.__x2, self.__y1), Point(self.__x2, self.__y2)), color)
+        
+        if self.has_top_wall:
+            self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x2, self.__y1)), color)
+        
+        if self.has_bottom_wall:
+            self.__win.draw_line(Line(Point(self.__x1, self.__y2), Point(self.__x2, self.__y2)), color)
 
 
 
 def main():
     win = Window(800, 600)
-    point_1 = Point(50, 50)
-    point_2 = Point(200, 50)
-    line_1 = Line(point_1, point_2)
-    win.draw_line(line_1, "black")
+    square = Cell(50, 50, 100, 100, win)
+    square.draw()
+    u = Cell(150, 50, 200, 100, win, True, True, False)
+    u.draw()
+
     win.wait_for_close()
 
 main()
