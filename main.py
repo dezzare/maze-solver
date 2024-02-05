@@ -1,4 +1,5 @@
 from tkinter import Tk, BOTH, Canvas
+import time
 
 class Window:
     def __init__(self, width, height):
@@ -83,14 +84,59 @@ class Cell:
         center_y_to_cell = ((to_cell.__y2 - to_cell.__y1) // 2) + to_cell.__y1
         self.__win.draw_line(Line(Point(center_x, center_y), Point(center_x_to_cell, center_y_to_cell)), color)
 
+class Maze:
+    def __init__ (
+            self,
+            x1,
+            y1,
+            num_rows,
+            num_cols,
+            cell_size_x,
+            cell_size_y,
+            win,
+    ):
+        self.x1 = x1
+        self.y1 = y1
+        self.num_rows = num_rows
+        self.num_cols = num_cols
+        self.cell_size_x = cell_size_x
+        self.cell_size_y = cell_size_y
+        self.win = win
+        self.__cells = []
+        self._create_cells()
+
+    def _create_cells(self):
+        for i in range(self.num_cols):
+            list_of_cells = []
+            for j in range(self.num_rows):
+                list_of_cells.append(self._draw_cell(i, j))
+            self.__cells.append(list_of_cells)
+
+
+    def _draw_cell(self, i, j):
+        x1 = self.x1 + i * self.cell_size_x
+        y1 = self.y1 + j * self.cell_size_y
+        x2 = x1 + self.cell_size_x
+        y2 = y1 + self.cell_size_y
+        cell = Cell(x1, y1, x2, y2, self.win)
+        cell.draw()
+        self._animate()
+        return cell
+    
+    def _animate(self):
+        self.win.redraw()
+        time.sleep(0.05)
+
+        
 
 def main():
     win = Window(800, 600)
-    square = Cell(50, 50, 100, 100, win)
-    square.draw()
-    u = Cell(150, 50, 200, 100, win, True, True, False)
-    u.draw()
-    square.draw_move(u)
+    # square = Cell(50, 50, 100, 100, win)
+    # square.draw()
+    # u = Cell(150, 50, 200, 100, win, True, True, False)
+    # u.draw()
+    # square.draw_move(u)
+    maze = Maze(150, 50, 10, 10, 50, 50, win)
 
     win.wait_for_close()
 
