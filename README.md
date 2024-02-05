@@ -1,9 +1,9 @@
 # maze-solver
 
 
-This is my second project in Python.
+This is my second project in Python, and it was base on boot.dev Maze Solver Guide.
 
-The objective is create a Maze and automactily solve it.
+The objective is create a visual representation of a Maze and automactily solve it.
 
 To run this project you will need tk lib. You can check if you have it with the command:
 python -m tkinter
