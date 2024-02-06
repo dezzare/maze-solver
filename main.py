@@ -64,15 +64,23 @@ class Cell:
 
         if self.has_left_wall:
             self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x1, self.__y2)), color)
+        else:
+            self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x1, self.__y2)), "white")
         
         if self.has_right_wall:
             self.__win.draw_line(Line(Point(self.__x2, self.__y1), Point(self.__x2, self.__y2)), color)
+        else:
+            self.__win.draw_line(Line(Point(self.__x2, self.__y1), Point(self.__x2, self.__y2)), "white")
         
         if self.has_top_wall:
             self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x2, self.__y1)), color)
+        else:
+            self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x2, self.__y1)), "white")
         
         if self.has_bottom_wall:
             self.__win.draw_line(Line(Point(self.__x1, self.__y2), Point(self.__x2, self.__y2)), color)
+        else:
+            self.__win.draw_line(Line(Point(self.__x1, self.__y2), Point(self.__x2, self.__y2)), "white")
 
     def draw_move(self, to_cell, undo=False):
         color = "red"
@@ -104,6 +112,7 @@ class Maze:
         self.win = win
         self.cells = []
         self._create_cells()
+        self._break_entrance_and_exit()
 
     def _create_cells(self):
         for i in range(self.num_cols):
@@ -114,11 +123,13 @@ class Maze:
 
 
     def _draw_cell(self, i, j, cell=None):
-        x1 = self.x1 + i * self.cell_size_x
-        y1 = self.y1 + j * self.cell_size_y
-        x2 = x1 + self.cell_size_x
-        y2 = y1 + self.cell_size_y
-        cell = Cell(x1, y1, x2, y2, self.win)
+        
+        if cell == None:
+            x1 = self.x1 + i * self.cell_size_x
+            y1 = self.y1 + j * self.cell_size_y
+            x2 = x1 + self.cell_size_x
+            y2 = y1 + self.cell_size_y
+            cell = Cell(x1, y1, x2, y2, self.win)
         
         if self.win != None:
             cell.draw()
@@ -129,6 +140,15 @@ class Maze:
         self.win.redraw()
         time.sleep(0.05)
 
+    
+    def _break_entrance_and_exit(self):
+        # Entrance will always be at the top-left cell
+        self.cells[0][0].has_top_wall = False
+        self._draw_cell(0, 0, self.cells[0][0])
+        # Exit will always be at the bottom-right cell
+        self.cells[-1][-1].has_bottom_wall = False
+        self._draw_cell(-1, -1, self.cells[-1][-1])
+
         
 
 def main():
@@ -138,7 +158,7 @@ def main():
     # u = Cell(150, 50, 200, 100, win, True, True, False)
     # u.draw()
     # square.draw_move(u)
-    #maze = Maze(150, 50, 10, 10, 50, 50, win)
+    maze = Maze(150, 50, 10, 10, 50, 50, win)
 
     win.wait_for_close()
 
