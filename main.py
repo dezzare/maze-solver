@@ -1,5 +1,6 @@
 from tkinter import Tk, BOTH, Canvas
 import time
+import random
 
 class Window:
     def __init__(self, width, height):
@@ -59,6 +60,7 @@ class Cell:
         self.__x2 = x2  #right point
         self.__y2 = y2  #bottom point
         self.__win = window
+        self.visited = False
     
     def draw(self, color="black"):
 
@@ -102,6 +104,7 @@ class Maze:
             cell_size_x,
             cell_size_y,
             win=None,
+            seed=None
     ):
         self.x1 = x1
         self.y1 = y1
@@ -110,9 +113,15 @@ class Maze:
         self.cell_size_x = cell_size_x
         self.cell_size_y = cell_size_y
         self.win = win
+
+        if seed is not None:
+            self.seed = random.seed(seed)
+
         self.cells = []
         self._create_cells()
         self._break_entrance_and_exit()
+        self._break_walls_r(0,0)
+        self._reset_cells_visited()
 
     def _create_cells(self):
         for i in range(self.num_cols):
@@ -149,6 +158,49 @@ class Maze:
         self.cells[-1][-1].has_bottom_wall = False
         self._draw_cell(-1, -1, self.cells[-1][-1])
 
+    def _break_walls_r(self, i, j):
+        self.cells[i][j].visited = True
+        while True:
+            to_visit = self._get_neighbor_to_visit(i, j)
+
+            if len(to_visit) == 0:
+                self._draw_cell(0, 0, self.cells[i][j])
+                return
+            
+            next_ij = random.choice(to_visit) # next_ij[0] = i and next_ij[1] = j
+            next_cell = self.cells[next_ij[0]][next_ij[1]]
+
+            if next_ij[0] == i - 1: #UP to the current
+                self.cells[i][j].has_top_wall = False
+                next_cell.has_bottom_wall = False
+            elif next_ij[0] == i + 1: #DOWN
+                self.cells[i][j].has_bottom_wall = False
+                next_cell.has_top_wall = False
+            elif next_ij[1] == j - 1: #LEFT
+                self.cells[i][j].has_left_wall = False
+                next_cell.has_right_wall = False
+            elif next_ij[1] == j + 1: #RIGHT
+                self.cells[i][j].has_right_wall = False
+                next_cell.has_left_wall = False
+            
+            self._break_walls_r(next_ij[0], next_ij[1])
+            
+    def _get_neighbor_to_visit(self, i, j):
+            neighbor = []
+            if i - 1 > 0 and not self.cells[i-1][j].visited:
+                neighbor.append((i-1, j)) #UP
+            if i + 1 < len(self.cells) and not self.cells[i+1][j].visited:
+                neighbor.append((i+1, j)) #DOWN
+            if j - 1 > 0 and not self.cells[i][j-1].visited:
+                neighbor.append((i, j-1)) #LEFT
+            if j + 1 < len(self.cells[i]) and not self.cells[i][j+1].visited:
+                neighbor.append((i, j+1)) #RIGHT
+            return neighbor
+    
+    def _reset_cells_visited(self):
+        for i in range(self.num_rows):
+            for j in range(self.num_cols):
+                self.cells[i][j].visited = False
         
 
 def main():
