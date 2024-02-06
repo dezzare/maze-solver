@@ -1,16 +1,9 @@
 import time
 import random
 from window import Window
+from point import Point
 
 
-class Point:
-    def __init__(self, x, y):
-        #X is horizontal coordinate
-        #x=0 is the left of the screen
-        self.x = x
-        #Y is vertical coordinate
-        #y=0 is the top of the screen
-        self.y = y
 
 class Line:
     def __init__(self, p1, p2):
