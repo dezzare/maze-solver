@@ -7,50 +7,6 @@ from point import Point
 
 
 
-class Cell:
-    def __init__(self, x1, y1, x2, y2, window=None, left=True, right=True, top=True, bottom=True):
-        self.has_left_wall = left
-        self.has_right_wall = right
-        self.has_top_wall = top
-        self.has_bottom_wall = bottom
-        self.__x1 = x1  #left point
-        self.__y1 = y1  #top point
-        self.__x2 = x2  #right point
-        self.__y2 = y2  #bottom point
-        self.__win = window
-        self.visited = False
-    
-    def draw(self, color="black"):
-
-        if self.has_left_wall:
-            self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x1, self.__y2)), color)
-        else:
-            self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x1, self.__y2)), "white")
-        
-        if self.has_right_wall:
-            self.__win.draw_line(Line(Point(self.__x2, self.__y1), Point(self.__x2, self.__y2)), color)
-        else:
-            self.__win.draw_line(Line(Point(self.__x2, self.__y1), Point(self.__x2, self.__y2)), "white")
-        
-        if self.has_top_wall:
-            self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x2, self.__y1)), color)
-        else:
-            self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x2, self.__y1)), "white")
-        
-        if self.has_bottom_wall:
-            self.__win.draw_line(Line(Point(self.__x1, self.__y2), Point(self.__x2, self.__y2)), color)
-        else:
-            self.__win.draw_line(Line(Point(self.__x1, self.__y2), Point(self.__x2, self.__y2)), "white")
-
-    def draw_move(self, to_cell, undo=False):
-        color = "red"
-        if undo:
-            color = "gray"
-        center_x = ((self.__x2 - self.__x1) // 2) + self.__x1
-        center_y = ((self.__y2 - self.__y1) // 2) + self.__y1
-        center_x_to_cell = ((to_cell.__x2 - to_cell.__x1) // 2) + to_cell.__x1
-        center_y_to_cell = ((to_cell.__y2 - to_cell.__y1) // 2) + to_cell.__y1
-        self.__win.draw_line(Line(Point(center_x, center_y), Point(center_x_to_cell, center_y_to_cell)), color)
 
 class Maze:
     def __init__ (
