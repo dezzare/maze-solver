@@ -40,7 +40,7 @@ class Cell:
         color = "red"
         if undo:
             color = "grey"
-        self.window.draw_line(Line(self.get_center_point(), to_cell.get_middle_point()), color)
+        self.window.draw_line(Line(self.get_center_point(), to_cell.get_center_point()), color)
     
     def get_center_point(self):
         return Point((self.top_left_point.x + self.top_right_point.x) / 2, (self.top_left_point.y + self.bottom_left_point.y) / 2)

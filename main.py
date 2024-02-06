@@ -14,6 +14,7 @@ def main():
     # u.draw()
     # square.draw_move(u)
     maze = Maze(150, 50, 10, 10, 50, 50, win)
+    maze.solve()
 
     win.wait_for_close()
 

@@ -105,4 +105,34 @@ class Maze:
         for i in range(self.num_rows):
             for j in range(self.num_cols):
                 self.cells[i][j].visited = False
+    
+    def solve(self):
+        return self._solve_r(0,0)
+    
+    def _solve_r(self, i, j):
+        self._animate()
+        self.cells[i][j].visited = True
+
+        if i == self.num_rows - 1 and j == self.num_cols - 1:
+            return True
         
+        neighbours = self._get_neighbor_to_visit(i, j)
+        
+        for cell in neighbours:
+            if not self._has_wall(i, j, cell[0], cell[1]):
+                self.cells[i][j].draw_move(self.cells[cell[0]][cell[1]])
+                if self._solve_r(cell[0], cell[1]):
+                    return True
+                self.cells[i][j].draw_move(self.cells[cell[0]][cell[1]], True)
+        return False
+    
+    def _has_wall(self, i, j, i2, j2):
+        if i < i2: # down
+            return self.cells[i][j].has_bottom_wall
+        if i > i2: # up
+            return self.cells[i][j].has_top_wall
+        if j < j2: # right
+            return self.cells[i][j].has_right_wall
+        return self.cells[i][j].has_left_wall
+
+
