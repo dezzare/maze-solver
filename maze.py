@@ -1,6 +1,7 @@
 from cell import Cell
 from point import Point
 import random
+import time
 
 class Maze:
     def __init__ (
@@ -66,7 +67,7 @@ class Maze:
             to_visit = self._get_neighbor_to_visit(i, j)
 
             if len(to_visit) == 0:
-                self._draw_cell(0, 0, self.cells[i][j])
+                self._draw_cell(self.cells[i][j])
                 return
             
             next_ij = random.choice(to_visit) # next_ij[0] = i and next_ij[1] = j
